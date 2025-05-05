@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoramento de Solicitações</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #153556;
+            color: #fff;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #153556;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #fff;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .verde {
+            background-color: #204121;
+            color: white;
+        }
+        .vermelho {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SINapse Monitor</h1>
+        <table>
+
+            <tbody>
+                <tr id="solicitacoes-row" class="{{ 'verde' if total_solicitacoes == 0 else 'vermelho' }}">
+                    <td>Solicitações Ativas</td>
+                    <td id="total-solicitacoes" style="text-align: center;">{{ total_solicitacoes }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Conectar ao WebSocket
+            const ws = new WebSocket(`ws://${window.location.host}/ws`);
+            
+            ws.onopen = function(event) {
+                console.log('Conectado: Recebendo atualizações em tempo real');
+            };
+            
+            ws.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                if (data.total_solicitacoes !== undefined) {
+                    const totalSolicitacoes = data.total_solicitacoes;
+                    document.getElementById('total-solicitacoes').textContent = totalSolicitacoes;
+                    
+                    // Atualizar a cor de fundo com base no valor
+                    const row = document.getElementById('solicitacoes-row');
+                    if (totalSolicitacoes == 0) {
+                        row.className = 'verde';
+                    } else {
+                        row.className = 'vermelho';
+                    }
+                }
+            };
+            
+            ws.onclose = function(event) {
+                console.log('Desconectado: Recarregue a página para reconectar');
+            };
+            
+            ws.onerror = function(error) {
+                console.error('WebSocket Error:', error);
+            };
+        });
+    </script>
+</body>
+</html>
