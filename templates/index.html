@@ -9,24 +9,26 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #153556;
+            color: #fff;
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background-color: #fff;
+            background-color: #153556;
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         h1 {
-            color: #333;
+            color: #fff;
             text-align: center;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            font-weight: bold;
         }
         th, td {
             padding: 12px;
@@ -56,23 +58,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>Monitor SINapse</h1>
+        <h1>SINapse Monitor</h1>
         
         <table>
-            <thead>
-                <tr>
-                    <th>Status</th>
-                    <th>Pendentes</th>
-                    <th>Impedidas</th>
-                    <th>Confirmadas</th>
-                </tr>
-            </thead>
             <tbody>
                 <tr>
-                    <td>Quantidade</td>
-                    <td id="pendentes" class="{{ 'amarelo' if pendentes > 0 else '' }}">{{ pendentes }}</td>
-                    <td id="impedidas" class="{{ 'vermelho' if impedidas > 0 else '' }}">{{ impedidas }}</td>
-                    <td id="confirmadas" class="{{ 'verde' if confirmadas > 0 else '' }}">{{ confirmadas }}</td>
+                    <td id="pendentes" class="{{ 'amarelo' if pendentes > 0 else '' }}">Pendentes: {{ pendentes }}</td>
+                    <td id="impedidas" class="{{ 'vermelho' if impedidas > 0 else '' }}">Impedidas: {{ impedidas }}</td>
+                    <td id="confirmadas" class="{{ 'verde' if confirmadas > 0 else '' }}">Confirmadas: {{ confirmadas }}</td>
                 </tr>
             </tbody>
         </table>
