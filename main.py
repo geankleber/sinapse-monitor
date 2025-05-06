@@ -48,10 +48,16 @@ manager = ConnectionManager()
 # Página inicial
 @app.get("/", response_class=HTMLResponse)
 async def get_index(request: Request):
-    total_solicitacoes = len(mensagens)
+    # Contar mensagens por status
+    pendentes = sum(1 for msg in mensagens.values() if msg.get('status') == 'Pendente')
+    impedidas = sum(1 for msg in mensagens.values() if msg.get('status') == 'Impedida')
+    confirmadas = sum(1 for msg in mensagens.values() if msg.get('status') == 'Confirmada')
+    
     return templates.TemplateResponse("index.html", {
         "request": request, 
-        "total_solicitacoes": total_solicitacoes
+        "pendentes": pendentes,
+        "impedidas": impedidas,
+        "confirmadas": confirmadas
     })
 
 # Endpoint para receber as mensagens via POST
@@ -102,15 +108,29 @@ async def processar_mensagens(request: Request):
                         # Manter o valor original se a conversão falhar
                         pass
             
-            # Verificar se a mensagem já existe e tem status Confirmada
-            if codigo in mensagens and msg.get('status') == 'Confirmada':
-                del mensagens[codigo]
+            # Verificar se a mensagem já existe e tem status especial
+            if codigo in mensagens:
+                # Se a mensagem tiver status "Finalizada", exclui do dicionário
+                if msg.get('status') == 'Finalizada':
+                    del mensagens[codigo]
+                else:
+                    # Adicionar ou atualizar mensagem no dicionário
+                    mensagens[codigo] = msg
             else:
-                # Adicionar ou atualizar mensagem no dicionário
+                # Adicionar nova mensagem ao dicionário
                 mensagens[codigo] = msg
         
+        # Contar mensagens por status
+        pendentes = sum(1 for msg in mensagens.values() if msg.get('status') == 'Pendente')
+        impedidas = sum(1 for msg in mensagens.values() if msg.get('status') == 'Impedida')
+        confirmadas = sum(1 for msg in mensagens.values() if msg.get('status') == 'Confirmada')
+        
         # Notificar clientes WebSocket sobre a atualização
-        await manager.broadcast(json.dumps({"total_solicitacoes": len(mensagens)}))
+        await manager.broadcast(json.dumps({
+            "pendentes": pendentes,
+            "impedidas": impedidas,
+            "confirmadas": confirmadas
+        }))
         
         return Response(status_code=200)
     except Exception as e:
@@ -121,7 +141,11 @@ async def processar_mensagens(request: Request):
 async def excluir_mensagens():
     mensagens.clear()
     # Notificar clientes WebSocket sobre a atualização
-    await manager.broadcast(json.dumps({"total_solicitacoes": 0}))
+    await manager.broadcast(json.dumps({
+        "pendentes": 0,
+        "impedidas": 0,
+        "confirmadas": 0
+    }))
     return {"message": "Todas as mensagens foram excluídas"}
 
 # Endpoint WebSocket
