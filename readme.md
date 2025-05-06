@@ -1,6 +1,6 @@
-# API REST com FastAPI para Gerenciamento de Mensagens
+# API REST com FastAPI para Monitoramento das Mensagens do SINapse (ONS).
 
-Este projeto implementa uma API REST usando FastAPI para receber e gerenciar mensagens, com uma interface web que atualiza em tempo real via WebSockets.
+Este projeto implementa uma API REST usando FastAPI para receber e gerenciar mensagens, com uma interface web que atualiza em tempo real via WebSockets. Ideal para exibição em telão como suporte adicional.
 
 ## Funcionalidades
 
@@ -8,7 +8,7 @@ Este projeto implementa uma API REST usando FastAPI para receber e gerenciar men
 - Recebimento de mensagens via POST
 - Gerenciamento de mensagens por status: Pendente, Impedida, Confirmada, Finalizada
 - Conversão automática de formatos de data
-- Gerenciamento de mensagens em memória
+- Gerenciamento de mensagens em memória. Persistência de dados é desnecessário para este objetivo
 - Página web com atualização em tempo real via WebSockets
 - Endpoint para excluir todas as mensagens
 
