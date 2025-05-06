@@ -93,19 +93,19 @@
                 // Atualizar contagens e estilos
                 if (data.pendentes !== undefined) {
                     const tdPendentes = document.getElementById('pendentes');
-                    tdPendentes.textContent = data.pendentes;
+                    tdPendentes.textContent = 'Pendentes: ' + data.pendentes;
                     tdPendentes.className = data.pendentes > 0 ? 'amarelo' : '';
                 }
                 
                 if (data.impedidas !== undefined) {
                     const tdImpedidas = document.getElementById('impedidas');
-                    tdImpedidas.textContent = data.impedidas;
+                    tdImpedidas.textContent = 'Impedidas: ' + data.impedidas;
                     tdImpedidas.className = data.impedidas > 0 ? 'vermelho' : '';
                 }
                 
                 if (data.confirmadas !== undefined) {
                     const tdConfirmadas = document.getElementById('confirmadas');
-                    tdConfirmadas.textContent = data.confirmadas;
+                    tdConfirmadas.textContent = 'Confirmadas: ' + data.confirmadas;
                     tdConfirmadas.className = data.confirmadas > 0 ? 'verde' : '';
                 }
             };
