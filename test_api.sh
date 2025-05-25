@@ -23,13 +23,15 @@ curl -s -X POST \
         "codigo": "1001",
         "descricao": "Solicitação de teste 1",
         "dataCadastro": "2023-05-10T08:30:00Z",
-        "dataAtualizacao": "2023-05-10T10:15:00Z"
+        "dataAtualizacao": "2023-05-10T10:15:00Z",
+        "status": "Pendente"
     },
     {
         "codigo": "1002",
         "descricao": "Solicitação de teste 2",
         "dataCadastro": "2023-05-11T14:20:00Z",
-        "dataAtualizacao": "2023-05-11T16:45:00Z"
+        "dataAtualizacao": "2023-05-11T16:45:00Z",
+        "status": "Impedida"
     }
   ]' \
   ${API_URL}/mensagens

@@ -28,35 +28,44 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            font-weight: bold;
         }
         th, td {
             padding: 12px;
-            text-align: left;
+            text-align: center;
             border-bottom: 1px solid #ddd;
         }
         th {
             background-color: #4CAF50;
             color: white;
         }
+        tr:hover {
+            background-color: #f2f2f2;
+        }
         .verde {
-            background-color: #204121;
+            background-color: #62BE5C;
             color: white;
         }
         .vermelho {
-            background-color: #f44336;
+            background-color: #DA0000;
             color: white;
+        }
+        .amarelo {
+            background-color: #FFC107;
+            color: black;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>SINapse Monitor</h1>
+        
         <table>
-
             <tbody>
-                <tr id="solicitacoes-row" class="{{ 'verde' if total_solicitacoes == 0 else 'vermelho' }}">
-                    <td>Solicitações Ativas</td>
-                    <td id="total-solicitacoes" style="text-align: center;">{{ total_solicitacoes }}</td>
+                <tr>
+                    <td id="pendentes" class="{{ 'amarelo' if pendentes > 0 else '' }}">Pendentes: {{ pendentes }}</td>
+                    <td id="impedidas" class="{{ 'vermelho' if impedidas > 0 else '' }}">Impedidas: {{ impedidas }}</td>
+                    <td id="confirmadas" class="{{ 'verde' if confirmadas > 0 else '' }}">Confirmadas: {{ confirmadas }}</td>
                 </tr>
             </tbody>
         </table>
@@ -73,17 +82,24 @@
             
             ws.onmessage = function(event) {
                 const data = JSON.parse(event.data);
-                if (data.total_solicitacoes !== undefined) {
-                    const totalSolicitacoes = data.total_solicitacoes;
-                    document.getElementById('total-solicitacoes').textContent = totalSolicitacoes;
-                    
-                    // Atualizar a cor de fundo com base no valor
-                    const row = document.getElementById('solicitacoes-row');
-                    if (totalSolicitacoes == 0) {
-                        row.className = 'verde';
-                    } else {
-                        row.className = 'vermelho';
-                    }
+                
+                // Atualizar contagens e estilos
+                if (data.pendentes !== undefined) {
+                    const tdPendentes = document.getElementById('pendentes');
+                    tdPendentes.textContent = 'Pendentes: ' + data.pendentes;
+                    tdPendentes.className = data.pendentes > 0 ? 'amarelo' : '';
+                }
+                
+                if (data.impedidas !== undefined) {
+                    const tdImpedidas = document.getElementById('impedidas');
+                    tdImpedidas.textContent = 'Impedidas: ' + data.impedidas;
+                    tdImpedidas.className = data.impedidas > 0 ? 'vermelho' : '';
+                }
+                
+                if (data.confirmadas !== undefined) {
+                    const tdConfirmadas = document.getElementById('confirmadas');
+                    tdConfirmadas.textContent = 'Confirmadas: ' + data.confirmadas;
+                    tdConfirmadas.className = data.confirmadas > 0 ? 'verde' : '';
                 }
             };
             
