@@ -57,7 +57,8 @@ async def get_index(request: Request):
         "request": request, 
         "pendentes": pendentes,
         "impedidas": impedidas,
-        "confirmadas": confirmadas
+        "confirmadas": confirmadas,
+        "mensagens": list(mensagens.values())  # Passa a lista de mensagens para o template
     })
 
 # Endpoint para receber as mensagens via POST
@@ -78,7 +79,7 @@ async def processar_mensagens(request: Request):
                     continue
         
         # Verificar se é uma lista
-        if not isinstance(data, list):
+        if not isinstance(data, list): # type: ignore
             return Response(status_code=400, content="O payload deve ser uma lista")
         
         # Se a lista estiver vazia, retornar 200 OK

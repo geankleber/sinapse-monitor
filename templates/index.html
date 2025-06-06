@@ -69,6 +69,28 @@
                 </tr>
             </tbody>
         </table>
+
+        <!-- Tabela de listagem das mensagens -->
+        <table style="margin-top: 40px; background: #fff; color: #222;">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Mensagem</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for msg in mensagens %}
+                <tr class="{{ 'amarelo' if msg.status == 'Pendente' else ('vermelho' if msg.status == 'Impedida' else ('verde' if msg.status == 'Confirmada' else '')) }}">
+                    <td>{{ msg.dataAtualizacao or msg.dataCadastro or '-' }}</td>
+                    <td>{{ msg.descricao or '-' }}</td>
+                    <td>{{ msg.status or '-' }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="3" style="text-align:center;">Nenhuma mensagem cadastrada</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
     <script>
@@ -82,26 +104,67 @@
             
             ws.onmessage = function(event) {
                 const data = JSON.parse(event.data);
-                
                 // Atualizar contagens e estilos
                 if (data.pendentes !== undefined) {
                     const tdPendentes = document.getElementById('pendentes');
                     tdPendentes.textContent = 'Pendentes: ' + data.pendentes;
                     tdPendentes.className = data.pendentes > 0 ? 'amarelo' : '';
                 }
-                
                 if (data.impedidas !== undefined) {
                     const tdImpedidas = document.getElementById('impedidas');
                     tdImpedidas.textContent = 'Impedidas: ' + data.impedidas;
                     tdImpedidas.className = data.impedidas > 0 ? 'vermelho' : '';
                 }
-                
                 if (data.confirmadas !== undefined) {
                     const tdConfirmadas = document.getElementById('confirmadas');
                     tdConfirmadas.textContent = 'Confirmadas: ' + data.confirmadas;
                     tdConfirmadas.className = data.confirmadas > 0 ? 'verde' : '';
                 }
+                // Atualizar tabela de mensagens se vier no payload
+                if (data.mensagens !== undefined) {
+                    atualizarTabelaMensagens(data.mensagens);
+                } else {
+                    // Buscar mensagens do backend se não vierem no payload
+                    fetch('/mensagens').then(r => r.json()).then(mensagens => atualizarTabelaMensagens(mensagens));
+                }
             };
+
+            function atualizarTabelaMensagens(mensagens) {
+                // Garante que mensagens é um array
+                if (!Array.isArray(mensagens)) {
+                    mensagens = Object.values(mensagens || {});
+                }
+                const tbody = document.querySelector('table:nth-of-type(2) tbody');
+                tbody.innerHTML = '';
+                if (mensagens.length === 0) {
+                    const tr = document.createElement('tr');
+                    const td = document.createElement('td');
+                    td.colSpan = 3;
+                    td.style.textAlign = 'center';
+                    td.textContent = 'Nenhuma mensagem cadastrada';
+                    tr.appendChild(td);
+                    tbody.appendChild(tr);
+                } else {
+                    mensagens.forEach(msg => {
+                        const tr = document.createElement('tr');
+                        let statusClass = '';
+                        if (msg.status === 'Pendente') statusClass = 'amarelo';
+                        else if (msg.status === 'Impedida') statusClass = 'vermelho';
+                        else if (msg.status === 'Confirmada') statusClass = 'verde';
+                        tr.className = statusClass;
+                        const tdData = document.createElement('td');
+                        tdData.textContent = msg.dataAtualizacao || msg.dataCadastro || '-';
+                        const tdMsg = document.createElement('td');
+                        tdMsg.textContent = msg.descricao || '-';
+                        const tdStatus = document.createElement('td');
+                        tdStatus.textContent = msg.status || '-';
+                        tr.appendChild(tdData);
+                        tr.appendChild(tdMsg);
+                        tr.appendChild(tdStatus);
+                        tbody.appendChild(tr);
+                    });
+                }
+            }
             
             ws.onclose = function(event) {
                 console.log('Desconectado: Recarregue a página para reconectar');
