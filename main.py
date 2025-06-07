@@ -8,6 +8,7 @@ from typing import List, Dict, Any, Optional
 import json
 from datetime import datetime
 import pytz
+import asyncio
 
 app = FastAPI()
 
@@ -60,6 +61,23 @@ async def get_index(request: Request):
         "confirmadas": confirmadas,
         "mensagens": list(mensagens.values())  # Passa a lista de mensagens para o template
     })
+
+# Função para remover mensagem confirmada depois de um minuto
+async def remover_confirmada_depois_de_um_minuto(codigo: str):
+    await asyncio.sleep(60)
+    msg = mensagens.get(codigo)
+    if msg and msg.get('status') == 'Confirmada':
+        del mensagens[codigo]
+        # Atualiza contadores e notifica clientes
+        pendentes = sum(1 for msg in mensagens.values() if msg.get('status') == 'Pendente')
+        impedidas = sum(1 for msg in mensagens.values() if msg.get('status') == 'Impedida')
+        confirmadas = sum(1 for msg in mensagens.values() if msg.get('status') == 'Confirmada')
+        await manager.broadcast(json.dumps({
+            "pendentes": pendentes,
+            "impedidas": impedidas,
+            "confirmadas": confirmadas,
+            "mensagens": list(mensagens.values())
+        }))
 
 # Endpoint para receber as mensagens via POST
 @app.post("/mensagens")
@@ -120,6 +138,10 @@ async def processar_mensagens(request: Request):
             else:
                 # Adicionar nova mensagem ao dicionário
                 mensagens[codigo] = msg
+
+            # Se status for "Confirmada", agenda remoção em 1 minuto
+            if msg.get('status') == 'Confirmada':
+                asyncio.create_task(remover_confirmada_depois_de_um_minuto(codigo))
         
         # Contar mensagens por status
         pendentes = sum(1 for msg in mensagens.values() if msg.get('status') == 'Pendente')
