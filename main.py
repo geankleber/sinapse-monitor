@@ -64,7 +64,7 @@ async def get_index(request: Request):
 
 # Função para remover mensagem confirmada depois de um minuto
 async def remover_confirmada_depois_de_um_minuto(codigo: str):
-    await asyncio.sleep(60)
+    await asyncio.sleep(600)
     msg = mensagens.get(codigo)
     if msg and msg.get('status') == 'Confirmada':
         del mensagens[codigo]
