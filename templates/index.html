@@ -83,7 +83,7 @@
                 {% for msg in mensagens %}
                 <tr class="{{ 'amarelo' if msg.status == 'Pendente' else ('vermelho' if msg.status == 'Impedida' else ('verde' if msg.status == 'Confirmada' else '')) }}">
                     <td>{{ msg.dataAtualizacao or msg.dataCadastro or '-' }}</td>
-                    <td>{{ msg.descricao or '-' }}</td>
+                    <td>{{ msg.mensagem or '-' }}</td>
                     <td>{{ msg.status or '-' }}</td>
                 </tr>
                 {% else %}
@@ -123,9 +123,13 @@
                 // Atualizar tabela de mensagens se vier no payload
                 if (data.mensagens !== undefined) {
                     atualizarTabelaMensagens(data.mensagens);
+                    console.log('mensagens:', data.mensagens); // Print no console cliente
                 } else {
                     // Buscar mensagens do backend se não vierem no payload
-                    fetch('/mensagens').then(r => r.json()).then(mensagens => atualizarTabelaMensagens(mensagens));
+                    fetch('/mensagens').then(r => r.json()).then(mensagens => {
+                        atualizarTabelaMensagens(mensagens);
+                        console.log('mensagens:', mensagens); // Print no console cliente
+                    });
                 }
             };
 
@@ -155,7 +159,7 @@
                         const tdData = document.createElement('td');
                         tdData.textContent = msg.dataAtualizacao || msg.dataCadastro || '-';
                         const tdMsg = document.createElement('td');
-                        tdMsg.textContent = msg.descricao || '-';
+                        tdMsg.textContent = msg.mensagem || '-';
                         const tdStatus = document.createElement('td');
                         tdStatus.textContent = msg.status || '-';
                         tr.appendChild(tdData);

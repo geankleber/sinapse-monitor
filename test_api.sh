@@ -21,14 +21,14 @@ curl -s -X POST \
   -d '[
     {
         "codigo": "1001",
-        "descricao": "Solicitação de teste 1",
+        "mensagem": "Solicitação de teste 1",
         "dataCadastro": "2023-05-10T08:30:00Z",
         "dataAtualizacao": "2023-05-10T10:15:00Z",
         "status": "Pendente"
     },
     {
         "codigo": "1002",
-        "descricao": "Solicitação de teste 2",
+        "mensagem": "Solicitação de teste 2",
         "dataCadastro": "2023-05-11T14:20:00Z",
         "dataAtualizacao": "2023-05-11T16:45:00Z",
         "status": "Impedida"
@@ -52,7 +52,7 @@ curl -s -X POST \
   -d '[
     {
         "codigo": "1001",
-        "descricao": "Esta mensagem deve ser excluída",
+        "mensagem": "Esta mensagem deve ser excluída",
         "status": "Confirmada"
     }
   ]' \
@@ -69,7 +69,7 @@ echo ""
 
 # Teste 6: Enviar mensagens com codificação diferente (simulando não-UTF8)
 echo "Teste 6: Enviando mensagem com codificação diferente"
-echo '[{"codigo": "1003", "descricao": "Mensagem com caracteres especiais: áéíóúçãõ"}]' > /tmp/msg_latin1.json
+echo '[{"codigo": "1003", "mensagem": "Mensagem com caracteres especiais: áéíóúçãõ"}]' > /tmp/msg_latin1.json
 iconv -f UTF-8 -t ISO-8859-1 /tmp/msg_latin1.json > /tmp/msg_converted.json
 
 curl -s -X POST \

@@ -106,6 +106,7 @@ async def processar_mensagens(request: Request):
         
         # Processar mensagens da lista
         for msg in data:
+            print(f"Mensagem recebida via POST: {msg}")  # Adicionado print no console do servidor
             # Verificar se a mensagem tem o campo 'codigo'
             if 'codigo' not in msg:
                 continue
