@@ -189,6 +189,21 @@ async def websocket_endpoint(websocket: WebSocket):
 async def get_mensagens():
     return mensagens
 
+# Filtro para formatação de datas no Jinja2
+from datetime import datetime
+
+def datetimeformat(value, format='%d/%m/%Y - %H:%M'):
+    if not value:
+        return ''
+    if isinstance(value, str):
+        try:
+            value = datetime.fromisoformat(value.replace('Z', '+00:00'))
+        except Exception:
+            return value
+    return value.strftime(format)
+
+templates.env.filters['datetimeformat'] = datetimeformat
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
