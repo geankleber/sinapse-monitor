@@ -38,10 +38,10 @@
             border-bottom: 1px solid #ddd;
         }
         th.data-col, td.data-col {
-            width: 15%;
+            width: 20%;
         }
         th.status-col, td.status-col {
-            width: 15%;
+            width: 20%;
         }
         th.msg-col {
             text-align: center;
@@ -93,7 +93,7 @@
             <tbody>
                 {% for msg in mensagens %}
                 <tr class="{{ 'amarelo' if msg.status == 'Pendente' else ('vermelho' if msg.status == 'Impedida' else ('verde' if msg.status == 'Confirmada' else '')) }}">
-                    <td class="data-col">{{ (msg.dataAtualizacao or msg.dataCadastro or '-')|replace('-', '/')|datetimeformat('%d/%m/%Y - %H:%M') if (msg.dataAtualizacao or msg.dataCadastro) else '-' }}</td>
+                    <td class="data-col">{{ msg.dataAtualizacao or msg.dataCadastro or '-' }}</td>
                     <td class="msg-col">{{ msg.mensagem or '-' }}</td>
                     <td class="status-col">{{ msg.status or '-' }}</td>
                 </tr>
@@ -169,23 +169,7 @@
                         tr.className = statusClass;
                         const tdData = document.createElement('td');
                         let rawData = msg.dataAtualizacao || msg.dataCadastro || '-';
-                        if (rawData && rawData.length >= 16) {
-                            // Espera formato ISO: yyyy-mm-ddThh:mm:ss ou yyyy-mm-dd hh:mm:ss
-                            let d = rawData.replace('T', ' ').replace(/-/g, '/');
-                            let dt = new Date(d);
-                            if (!isNaN(dt.getTime())) {
-                                let dia = String(dt.getDate()).padStart(2, '0');
-                                let mes = String(dt.getMonth() + 1).padStart(2, '0');
-                                let ano = dt.getFullYear();
-                                let hora = String(dt.getHours()).padStart(2, '0');
-                                let min = String(dt.getMinutes()).padStart(2, '0');
-                                tdData.textContent = `${dia}/${mes}/${ano} - ${hora}:${min}`;
-                            } else {
-                                tdData.textContent = rawData.substring(0, 16);
-                            }
-                        } else {
-                            tdData.textContent = rawData;
-                        }
+                        tdData.textContent = rawData;
                         const tdMsg = document.createElement('td');
                         tdMsg.textContent = msg.mensagem || '-';
                         tdMsg.className = 'msg-col';

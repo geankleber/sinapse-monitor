@@ -9,6 +9,7 @@ import json
 from datetime import datetime
 import pytz
 import asyncio
+from templates.filters import datetimeformat
 
 app = FastAPI()
 
@@ -24,6 +25,9 @@ app.add_middleware(
 # Diretório de templates e arquivos estáticos
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Registrar filtro customizado no Jinja2
+templates.env.filters['datetimeformat'] = datetimeformat
 
 # Dicionário para armazenar mensagens em memória
 mensagens: Dict[str, Dict[str, Any]] = {}

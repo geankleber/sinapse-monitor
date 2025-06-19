@@ -20,18 +20,22 @@ curl -s -X POST \
   -H "Content-Type: application/json" \
   -d '[
     {
-        "codigo": "1001",
-        "mensagem": "Solicitação de teste 1",
-        "dataCadastro": "2023-05-10T08:30:00Z",
-        "dataAtualizacao": "2023-05-10T10:15:00Z",
-        "status": "Pendente"
+        "dataAtualizacao": "2025-04-20T17:43:14.9520306+00:00",
+        "codigo": "20250417174308-N-3BT8Bw-ENT",
+        "origem": "COSR-NCO",
+        "destino": "ELETRONORTE",
+        "mensagem": "Tucuruí | Sincronizar 2 UG(s).",
+        "status": "Confirmada",
+        "dataCadastro": "2025-04-17T17:43:08.1724123+00:00"
     },
     {
-        "codigo": "1002",
-        "mensagem": "Solicitação de teste 2",
-        "dataCadastro": "2023-05-11T14:20:00Z",
-        "dataAtualizacao": "2023-05-11T16:45:00Z",
-        "status": "Impedida"
+        "dataAtualizacao": "2025-04-21T10:15:00.0000000+00:00",
+        "codigo": "20250421101500-N-4CT9Cx-ENT",
+        "origem": "COSR-NCO",
+        "destino": "ELETRONORTE",
+        "mensagem": "Itaipu | Manutenção programada.",
+        "status": "Pendente",
+        "dataCadastro": "2025-04-21T10:14:50.0000000+00:00"
     }
   ]' \
   ${API_URL}/mensagens
