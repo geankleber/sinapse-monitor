@@ -2,6 +2,10 @@
 
 Este projeto implementa uma API REST usando FastAPI para receber e gerenciar mensagens, com uma interface web que atualiza em tempo real via WebSockets. Ideal para exibição em telão como suporte adicional.
 
+<div align="center">
+  <img src="static/img/arquitetura.png" alt="Descrição da imagem">
+</div>
+
 ## Funcionalidades
 
 - API REST com CORS habilitado
