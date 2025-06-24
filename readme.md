@@ -41,8 +41,8 @@ Este projeto implementa uma API REST usando FastAPI para receber e gerenciar men
 
 1. Crie um ambiente virtual (opcional, mas recomendado):
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # No Windows: venv\Scripts\activate
+   python -m venv .venv
+   source .venv/bin/activate  # No Windows: .venv\Scripts\activate
    ```
 
 2. Instale as dependências:
@@ -65,12 +65,12 @@ Este projeto implementa uma API REST usando FastAPI para receber e gerenciar men
 
 1. Construa a imagem Docker:
    ```bash
-   docker build -t api-mensagens .
+   docker build -t sinapse-monitor .
    ```
 
 2. Execute o contêiner:
    ```bash
-   docker run -p 8000:8000 api-mensagens
+   docker run -p 8000:8000 sinapse-monitor
    ```
 
 ## Testando a API
