@@ -117,4 +117,9 @@ Campos especiais:
   - `Pendente`: Destacada em amarelo na interface
   - `Impedida`: Destacada em vermelho na interface
   - `Confirmada`: Destacada em verde na interface
+
   - `Finalizada`: Mensagem será excluída do sistema
+ 
+# Licença
+
+Este é um projeto de código aberto licenciado sob a GNU Affero General Public License v3. [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
